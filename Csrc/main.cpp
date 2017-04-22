@@ -47,13 +47,13 @@ double csin(double x)
 		}
 	}
 
-	std::cout << n << std::endl;
+	std::cout << "Sin is calculated with the value " << n << std::endl;
 	return csin0(n);
 }
 
 int main()
 {
-	std::cout << csin(PI / 2) << std::endl;
-	std::cout << std::sin(PI / 2) << std::endl;
+	std::cout << "The sin of " << PI << " is " << csin(PI / 2) << std::endl;
+	std::cout << "C++ libs say it is " << std::sin(PI / 2) << std::endl;
 	return 0;
 }
