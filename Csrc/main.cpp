@@ -3,19 +3,9 @@
 
 #define PI 3.141592653
 
-double pow(double base, int32_t exponent) {
-  if (exponent == 0) return 1;
-  return base * pow(base, exponent - 1);
-}
-
-int32_t factorial(int32_t number) {
-  if (number == 0) return 1;
-  return number * factorial(number - 1);
-}
-
 double csin0(double x) {
   int32_t iter = 1;
-  const int MAX = 11;
+  const int MAX = 42;
 
   double result = x;
   double interResult = x;
