@@ -1,7 +1,9 @@
 # Sin Implementation in MIPS Assembler
 
 This document serves as project documentation and will give some additional explanation, to the comments in the assembler code.
-The optimizations done to the algorithm will be explained briefly in the C++ Implementation section.
+The optimizations done to the algorithm will be explained briefly in the C++ Implementation section. The implementation is based on the Taylor approximation of the sin function given by:
+
+![TaylorSeries](http://www.sciweavers.org/tex2img.php?eq=%5Csum_%7Bi%3D0%7D%5E%7B%5Cinfty%7D%28-1%29%5Ei%20%5Cfrac%7Bx%5E%7B2i%2B1%7D%7D%7B%282i%2B1%29%21%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
 ## C++ Implementation
 
@@ -16,7 +18,9 @@ This method approximates the input of any value of x utilizing the ``csin(double
 This method approximates the tan of the input utilizing the ``csin(double x)`` and ``ccos(double x)`` functions, as **tan(x) = sin(x)/cos(x)**.
 
 ### ``csin0(double x)``
-This method approximates sin(x) for an value x of the interval [-PI/2,PI/2] by using the Taylor approximation. The loop is optimized to
+This method approximates sin(x) for an value x of the interval
+![intervalPiHalf](http://www.sciweavers.org/tex2img.php?eq=%28-%5Cfrac%7B%5Cpi%7D%7B2%7D%2C%5Cfrac%7B%5Cpi%7D%7B2%7D%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+ by using the Taylor approximation. The loop is optimized to
 remove restrictions that are created with the use of the factorial of the increasing iterator.
 
 The loop uses the previous expression **Ti-1** to calculate the current expression **Ti**, beginning from the 2nd iteration with the iterator
@@ -44,10 +48,10 @@ not use a factorial function enabling better precision, as the precision is only
 
 
 ## Assembler Implementation
-The output is required to be in a formatted table containg all values of an input containg of an interval start n, an interval end m and
+The output is required to be in a formatted table containing all values of an input containing of an interval start n, an interval end m and
 an interval step i. This output will be formatted in markdown format. A rendered table will look like this:
 
-vlaue x | sin(x) | cos(x) | tan(x)
+value x | sin(x) | cos(x) | tan(x)
 :-----: | :----: | :----: | :----:
 0 | 0 | 1 | 0
 PI/4 | 0.707106 | 0.707106 | 1
@@ -55,9 +59,9 @@ PI/2 | 1 | 0 | -/-
 3PI/4 | 0.707106 | 0.707106 | -1
 PI | 0 | -1 | 0
 
-This table is diplayed by the given code that will be printed out when running the program in the SPIM simulator
+This table is displayed by the given code that will be printed out when running the program in the SPIM simulator
 ```
-vlaue x | sin(x) | cos(x) | tan(x)
+value x | sin(x) | cos(x) | tan(x)
 :-----: | :----: | :----: | :----:
 0 | 0 | 1 | 0
 PI/4 | 0.707106 | 0.707106 | 1
