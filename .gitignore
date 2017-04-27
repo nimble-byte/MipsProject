@@ -2,7 +2,6 @@
 # Created by https://www.gitignore.io/api/c++,intellij,assembler
 
 ### Assembler ###
-*.[sS]
 *.bc
 
 ### C++ ###
@@ -102,4 +101,3 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/c++,intellij,assembler
-

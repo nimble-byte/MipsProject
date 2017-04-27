@@ -13,7 +13,7 @@ double csin0(double x) {
   const int MAX = 5;
 
   double valueI = x;
-  double interResult = x;
+  double result = x;
 
   /*
    * loop calculates the iterative values based on the previous value, beginning with the second value with i = 3
@@ -24,10 +24,10 @@ double csin0(double x) {
     valueI = valueI / (iter - 1);     // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
     valueI = valueI / iter;           // of (2i + 1), that limits the number of executions
 
-    interResult += valueI;
+    result += valueI;
   }
 
-  return interResult;
+  return result;
 }
 
 /**
@@ -75,6 +75,7 @@ double ctan(double x) {
 int main() {
   std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
   std::cout << "---------|----------------|----------------|---------------" << std::endl;
+
   for (int i = 0; 8 > i; i++) {
     std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
   }
