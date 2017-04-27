@@ -10,10 +10,10 @@ This method reduces the input of any value of x to the interval [-PI/2,PI/2]. Af
 ``csin0(double x)`` and the result is returned.
 
 ### ``ccos(double x)``
-This method approximates the input of any value of x utilizing the ``csin(double x)`` method.
+This method approximates the input of any value of x utilizing the ``csin(double x)`` function, as *cos(x) = sin(PI/2 - x)*.
 
 ### ``ctan(double x)``
-This method approximates the tan of the input utilizint the ``csin(double x)`` and ``ccos(double x)`` functions.
+This method approximates the tan of the input utilizing the ``csin(double x)`` and ``ccos(double x)`` functions, as *tan(x) = sin(x)/cos(x)*.
 
 ### ``csin0(double x)``
 This method approximates sin(x) for an value x of the interval [-PI/2,PI/2] by using the Taylor approximation. The loop is optimized to

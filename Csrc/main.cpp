@@ -3,6 +3,64 @@
 
 #define PI 3.141592653
 
+double csin(double);
+double ccos(double);
+double ctan(double);
+double csin0(double);
+
+
+int main() {
+  std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
+  std::cout << "---------|----------------|----------------|---------------" << std::endl;
+
+  for (int i = 0; 8 > i; i++) {
+    std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
+  }
+  return 0;
+}
+
+/**
+ * Approximates the sin of the input with the Taylor approximation with a precision of T5
+ * @param x input value
+ * @return approximation of sin(x)
+ */
+double csin(double x) {
+  if ((x <= PI / 2 && (x >= -PI / 2))) return csin0(x);
+
+  double helper = x;
+  while ((helper > PI / 2) || (helper < -PI / 2)) {
+    if (helper > PI / 2) {
+      helper -= PI;
+    } else {
+      helper += PI;
+    }
+    helper *= -1;
+  }
+
+  return csin0(helper);
+}
+
+/**
+ * Approximates the cos of the input with the Taylor approximation of sin and a precision of T5
+ * @param x input value
+ * @return approximation of cos(x)
+ */
+double ccos(double x) {
+  double n = PI / 2;
+  csin(n - x);
+}
+
+/**
+ * Approximates the cos of the input with the Taylor approximation of sin and cos and a precision of T5
+ * @param x input
+ * @return approximation of tan(x)
+ */
+double ctan(double x) {
+  double sinX = csin(x);
+  double cosX = ccos(x);
+  return sinX/cosX;
+}
+
 /**
  * Approximates the value of sin for values in the interval [-PI/2,PI/2]
  * @param x input value
@@ -28,56 +86,4 @@ double csin0(double x) {
   }
 
   return result;
-}
-
-/**
- * Approximates the sin of the input with the Taylor approximation with a precision of T5
- * @param x input value
- * @return approximation of sin(x)
- */
-double csin(double x) {
-  if ((x <= PI / 2 && (x >= -PI / 2))) return csin0(x);
-
-  double n = x;
-  while ((n > PI / 2) || (n < -PI / 2)) {
-    if (n > PI / 2) {
-      n -= PI;
-    } else {
-      n += PI;
-    }
-    n *= -1;
-  }
-
-  return csin0(n);
-}
-
-/**
- * Approximates the cos of the input with the Taylor approximation of sin and a precision of T5
- * @param x input value
- * @return approximation of cos(x)
- */
-double ccos(double x) {
-  double n = PI / 2;
-  csin(n - x);
-}
-
-/**
- * Approximates the cos of the input with the Taylor approximation of sin and cos and a precision of T5
- * @param x input
- * @return approximation of tan(x)
- */
-double ctan(double x) {
-  double sinX = csin(x);
-  double cosX = ccos(x);
-  return sinX/cosX;
-}
-
-int main() {
-  std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
-  std::cout << "---------|----------------|----------------|---------------" << std::endl;
-
-  for (int i = 0; 8 > i; i++) {
-    std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
-  }
-  return 0;
 }
