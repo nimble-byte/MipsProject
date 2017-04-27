@@ -3,7 +3,6 @@
 # CONSTANTS
 pi:           .double 3.1415926535
 piHalf:       .double 1.57079632675
-two:          .double 2.0
 
 maxIt:        .word   5
 
@@ -30,9 +29,9 @@ negativeStep: .asciiz "Step must be > 0.\n"
 # ----------Constants----------
 # The following constants will be loaded repeadtedly into these registers
 #
-# pi:     $f20
-# piHalf: $f22
-# 2.0:    $f24
+# pi:           $f20
+# piHalf:       $f22
+# sinResult:    $f24 -> for faster calculation of tan
 #
 # maxIt:  $s0
 #

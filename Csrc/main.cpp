@@ -70,17 +70,18 @@ double csin0(double x) {
   int32_t iter = 3;
   const int MAX = 5;
 
-  double valueI = x;
-  double result = x;
+  double valueI = x;    // iteration value Ti for each iteration of the Taylor approximation
+  double result = x;    // final result of the full Taylor approximation
 
   /*
-   * loop calculates the iterative values based on the previous value, beginning with the second value with i = 3
-   * this limits the possible precision of the result to the limits of the double data format
+   * loop calculates the iterative values based on the previous value, beginning with the second
+   * value with i = 3 this limits the possible precision of the result to the limits of the
+   * double data format
    */
   for (iter; iter < (MAX * 2 + 3); iter += 2) {
-    valueI = valueI * x * -x;         // multiply the last x^(2i+1) by -x^2 (therefore includes also the factor -1^i)
+    valueI = valueI * x * -x;         // multiply the iterative value by -x^2 (therefore includes x^2 and the factor (-1)^i for the respective iteration)
     valueI = valueI / (iter - 1);     // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
-    valueI = valueI / iter;           // of (2i + 1), that limits the number of executions
+    valueI = valueI / iter;           // of (2i + 1), which would limit the number of iterations
 
     result += valueI;
   }
