@@ -9,20 +9,20 @@
  * @return approximation of sin(x)
  */
 double csin0(double x) {
-  int32_t iter = 1;
-  const int MAX = 42;
+  int32_t iter = 3;
+  const int MAX = 5;
 
   double valueI = x;
   double interResult = x;
 
   /*
-   * loop calculates the iterative values based on the previous value, beginning with the second value with i = 1
-   * this limits the precision of the result to the limits of the double data format
+   * loop calculates the iterative values based on the previous value, beginning with the second value with i = 3
+   * this limits the possible precision of the result to the limits of the double data format
    */
-  for (iter; iter < MAX; iter++) {
+  for (iter; iter < (MAX * 2 + 3); iter += 2) {
     valueI = valueI * x * -x;         // multiply the last x^(2i+1) by -x^2 (therefore includes also the factor -1^i)
-    valueI = valueI / (2 * iter);     // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
-    valueI = valueI / (2 * iter + 1); // of (2i + 1), that limit the number of executions
+    valueI = valueI / (iter - 1);     // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
+    valueI = valueI / iter;           // of (2i + 1), that limits the number of executions
 
     interResult += valueI;
   }
@@ -31,7 +31,7 @@ double csin0(double x) {
 }
 
 /**
- * Approximates the sin of the input with the Taylor approximation
+ * Approximates the sin of the input with the Taylor approximation with a precision of T5
  * @param x input value
  * @return approximation of sin(x)
  */
@@ -48,15 +48,35 @@ double csin(double x) {
     n *= -1;
   }
 
-  std::cout << "Sin is calculated with the value " << n << std::endl;
   return csin0(n);
 }
 
-int main() {
-  std::cout << "The sin of " << 12 << " is " << csin(12) << std::endl;
-  std::cout << "C++ libs say it is " << std::sin(12) << std::endl << std::endl;
+/**
+ * Approximates the cos of the input with the Taylor approximation of sin and a precision of T5
+ * @param x input value
+ * @return approximation of cos(x)
+ */
+double ccos(double x) {
+  double n = PI / 2;
+  csin(n - x);
+}
 
-  std::cout << "The sin of " << 3.14 << " is " << csin(3.14) << std::endl;
-  std::cout << "C++ libs say it is " << std::sin(3.14) << std::endl << std::endl;
+/**
+ * Approximates the cos of the input with the Taylor approximation of sin and cos and a precision of T5
+ * @param x input
+ * @return approximation of tan(x)
+ */
+double ctan(double x) {
+  double sinX = csin(x);
+  double cosX = ccos(x);
+  return sinX/cosX;
+}
+
+int main() {
+  std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
+  std::cout << "---------|----------------|----------------|---------------" << std::endl;
+  for (int i = 0; 8 > i; i++) {
+    std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
+  }
   return 0;
 }
