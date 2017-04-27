@@ -14,9 +14,10 @@ inputStep:      .asciiz "Please enter a step size n > 0: "
 
 # OUTPUT
 tableHeader:  .asciiz "\tx\t|\tsin(x)\t|\tcos(x)\t|\ttan(x)\n"
-tableSep:     .asciiz ":-------: | :----------: | :----------: | :-----------:\n"
+tableSep:     .asciiz ":---------------------:|:--------------------:|:--------------------:|:-------------------:\n"
 spacedPipe:   .asciiz " | "
 endl:         .asciiz "\n"
+finishedM:    .asciiz "\nProgram finished."
 
 # ERROR
 restartM:     .asciiz "Restarting program\n\n"
@@ -95,9 +96,89 @@ main:
       c.le.d $f30, $f4
       bc1t wSError
 
+      # load and display table header
+      li $v0, 4
+      la $a0, tableHeader
+      syscall
+
+      # load and display table seperator
+      li $v0, 4
+      la $a0, tableSep
+      syscall
+
+      # jump to calculation subroutine
+      jal calc
+
+      # load and display finished message
+      li $v0, 4
+      la $a0, finishedM
+      syscall
+
       # end program
       li $v0, 10
+	    syscall
+
+calc:
+      # all necessary variable for the loop are already set up in main
+      # load and display Xmin($f26) value in the table
+      li $v0, 3
+      mov.d $f12, $f26
       syscall
+
+      # load and display cell separator
+      li $v0, 4
+      la $a0, spacedPipe
+      syscall
+
+      # calculate sin(Xmin); result will be in $f0
+      #jal sin
+
+      # load and display result($f0) of sin calculation
+      li $v0, 3
+      mov.d $f12, $f0
+      syscall
+
+      # load and display cell separator
+      li $v0, 4
+      la $a0, spacedPipe
+      syscall
+
+      # calculate cos(Xmin); result will be in $f0
+      #jal cos
+
+      # load and display result($f0) of cos calculation
+      li $v0, 3
+      mov.d $f12, $f0
+      syscall
+
+      # load and display cell separator
+      li $v0, 4
+      la $a0, spacedPipe
+      syscall
+
+      # calculate tan(Xmin); result will be in $f0
+      #jal tan
+
+      # load and display result($f0) of tan calculation
+      li $v0, 3
+      mov.d $f12, $f0
+      syscall
+
+      # load and display end of line
+      li $v0, 4
+      la $a0, endl
+      syscall
+
+      # increase Xmin($f26) by stepsize n($f30) for calculation of next row
+      add.d $f26, $f26, $f30
+
+      # conpare if Xmin($f26) is smaller/equal Xmax($f28)
+      c.le.d $f26, $f28
+      # if true then branch to calc for next iteration
+      bc1t calc
+
+      # else return to main function to end program
+      jr $ra
 
 restart:
         # load and display restart message
