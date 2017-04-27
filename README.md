@@ -10,16 +10,16 @@ This method reduces the input of any value of x to the interval [-PI/2,PI/2]. Af
 ``csin0(double x)`` and the result is returned.
 
 ### ``ccos(double x)``
-This method approximates the input of any value of x utilizing the ``csin(double x)`` function, as *cos(x) = sin(PI/2 - x)*.
+This method approximates the input of any value of x utilizing the ``csin(double x)`` function, as **cos(x) = sin(PI/2 - x)**.
 
 ### ``ctan(double x)``
-This method approximates the tan of the input utilizing the ``csin(double x)`` and ``ccos(double x)`` functions, as *tan(x) = sin(x)/cos(x)*.
+This method approximates the tan of the input utilizing the ``csin(double x)`` and ``ccos(double x)`` functions, as **tan(x) = sin(x)/cos(x)**.
 
 ### ``csin0(double x)``
 This method approximates sin(x) for an value x of the interval [-PI/2,PI/2] by using the Taylor approximation. The loop is optimized to
 remove restrictions that are created with the use of the factorial of the increasing iterator.
 
-The loop uses the previous expression Ti-1 to calculate the current expression Ti, beginning from the 2nd iteration with the iterator
+The loop uses the previous expression **Ti-1** to calculate the current expression **Ti**, beginning from the 2nd iteration with the iterator
 value 1.
 
 ### Optimizations
@@ -36,11 +36,11 @@ for (iter; iter < (MAX * 2 + 3); iter += 2) {
 This loop is optimized to use far less assembler instructions than a direct implementation of the Taylor approximation. It also does
 not use a factorial function enabling better precision, as the precision is only limited by the possibilities of the double number format:
 
-1. The first optimization is to avoid calculating the operand *(-1)^i* every iteration and instead calculating the value *-x* once.
+1. The first optimization is to avoid calculating the operand **(-1)^i** every iteration and instead calculating the value **-x** once.
 2. The second optimization is to each iteration value utilizing the previous iteration value (**prevVal**) calculating the next value
- by multiplying **prevVal** with -(x^2) = (x^n) - (x^(n + 2)) *(therefore including the (-1)^i factor; n = 2i)* and afterwards
- dividing **prevVal** by n and (n + 1) = (combined faculty divisions).
-3. The value *2i* is replaced by utilizing the loop iterator(**i**) and increasing it by 2 instead of 1.
+ by multiplying **prevVal** with **-(x^2) = (x^(2i+1)) - (x^(2(i+1)+1))** *(therefore including the* **(-1)^i** *factor)* and afterwards
+ dividing **prevVal** by **n** and **(n + 1) = (combined faculty divisions)**.
+3. The value **2i** is replaced by utilizing the loop iterator(**i**) and increasing it by 2 instead of 1.
 
 
 ## Assembler Implementation
