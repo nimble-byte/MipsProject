@@ -8,14 +8,14 @@ Taylor approximation that is used to calculate the function values.
 
 ## Basics
 The program is supposed to take three inputs. An interval start **xMin**, and interval
-end **xMax** and an interval step **n**. All three functions will be calculated for
+end **xMax** and an interval step **n**. All three trigonometric functions will be calculated for
 each single step and displayed in a table in one row.
 
 The calculations will be approximated by the Taylor approximation of the sin function
 that can be found [here](https://en.wikipedia.org/wiki/Sine#Series_definition). To
 improve precision of the approximation without needing too many iterations of a loop
-that calculates each addend of the Taylor series, the input value will be first reduced
-to the interval *[-PI/2, PI/2]*. The function `sin` will now only reduce all input values to this interval while the real approximation is done by the function `sin0`
+that calculates each summand of the Taylor series, the input value will be first reduced
+to the interval *[-PI/2, PI/2]*. The function `sin` will now only map all input values to this interval while the real approximation is done by the function `sin0`
 
 Furthermore *cos(x)* can be calculated using *sin(PI/2 - x)*. The *tan(x)* can be
 calculated from the other two results by dividing *sin(x)/cos(x)*.
@@ -24,10 +24,10 @@ calculated from the other two results by dividing *sin(x)/cos(x)*.
 To improve performance as well as precision further the following optimizations were
 added:
 
-1. Each single addend **Ti** of the Taylor series can be calculated using the previous
+1. Each single summand **Ti** of the Taylor series can be calculated using the previous
 value **T(i-1)** (except for the first that is simply the input **x**). This can be
 achieved by first multiplying **T(i-1)** with *x^2* and afterwards dividing it by *(2i)*
-and *(2i + 1)*. This not only decreases the number of calculation but also increases the
+and *(2i + 1)*. This not only decreases the number of calculations but also increases the
 precision as the number of iterations was strongly limited before due to the use of the
 faculty of *(2i + 1)*.
 
@@ -65,7 +65,7 @@ for (iter; iter < (MAX * 2 + 3); iter++) {
 
 ## Assembly Output
 As the output is required to be a formatted, we chose to use markdown like notation to
-enable a nice an clean look for the table if it is rendered. A rendered example table can
+enable a nice and clean look for the table if it is rendered. A rendered example table can
 e.g. look like this.
 
 value x | sin(x) | cos(x) | tan(x)
