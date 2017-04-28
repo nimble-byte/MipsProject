@@ -52,7 +52,7 @@ instead calculating the value **-x** once.
 3. The value **2i** is replaced by utilizing the loop iterator(**i**) and increasing it by 2
 instead of 1.
 
-4. The value of sin (x) is saved after the calculation as to enable a much faster calculation of
+4. The value of sin(x) is saved after the calculation as to enable a much faster calculation of
 tan(x), as cos(x) will be available in the result register.
 
 ## Assembler Implementation

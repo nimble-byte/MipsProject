@@ -11,10 +11,11 @@ double csin0(double);
 
 int main() {
   std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
-  std::cout << "---------|----------------|----------------|---------------" << std::endl;
+  std::cout << "----------------|-----------------|---------------|---------------" << std::endl;
 
   for (int i = 0; 8 > i; i++) {
-    std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
+    //std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
+    std::cout << i << "\t" << std::sin(i) << "\t" << csin(i) << std::endl;
   }
   return 0;
 }
@@ -28,6 +29,7 @@ double csin(double x) {
   if ((x <= PI / 2 && (x >= -PI / 2))) return csin0(x);
 
   double helper = x;
+
   while ((helper > PI / 2) || (helper < -PI / 2)) {
     if (helper > PI / 2) {
       helper -= PI;
@@ -47,7 +49,7 @@ double csin(double x) {
  */
 double ccos(double x) {
   double n = PI / 2;
-  csin(n - x);
+  return csin(n - x);
 }
 
 /**
@@ -67,7 +69,7 @@ double ctan(double x) {
  * @return approximation of sin(x)
  */
 double csin0(double x) {
-  int32_t iter = 3;
+  int32_t iter = 2;
   const int MAX = 5;
 
   double valueI = x;    // iteration value Ti for each iteration of the Taylor approximation
@@ -78,9 +80,10 @@ double csin0(double x) {
    * value with i = 3 this limits the possible precision of the result to the limits of the
    * double data format
    */
-  for (iter; iter < (MAX * 2 + 3); iter += 2) {
+  for (iter; iter < (MAX * 2 + 3); iter++) {
     valueI = valueI * x * -x;         // multiply the iterative value by -x^2 (therefore includes x^2 and the factor (-1)^i for the respective iteration)
-    valueI = valueI / (iter - 1);     // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
+    valueI = valueI / iter;           // divide the result of valueI by 2i and (2* + 1) to avoid using the factorial
+    iter++;
     valueI = valueI / iter;           // of (2i + 1), which would limit the number of iterations
 
     result += valueI;
