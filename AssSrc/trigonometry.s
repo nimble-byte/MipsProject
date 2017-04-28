@@ -1,8 +1,8 @@
 .data
 
 # CONSTANTS
-pi:           .double 3.1415926535
-piHalf:       .double 1.57079632675
+pi:           .double 3.141592653589793115997963468544185161590576171875
+piHalf:       .double 1.570796326794896619231691638751442098584699687552
 
 maxIt:        .word 21 # 2 * 9 (9 iteratons) + 3 for iter start value offset
 
