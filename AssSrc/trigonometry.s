@@ -171,7 +171,10 @@ calcLoop:
           syscall
 
           # calculate cos(Xmin); result will be in $f0
-
+          # calculate PI/2($f22) - Xmin($f26) and save result in $f12
+          sub.d $f12, $f22, $f26
+          #calculate cos(x) with sin(PI/2 - x)($f12)
+          jal sin
 
           # load and display result($f0) of cos calculation
           li $v0, 3
