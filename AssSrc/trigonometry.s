@@ -48,10 +48,10 @@ negativeStep: .asciiz "Step must be > 0.\n"
 # -x:         $f6
 # -1.0:       $f8
 # -PI/2       $f10
-# iter(double)$f8
 # valueI:     $f16
+# iter(double)$f18
 #
-# iter:       $t0
+# iter(int):  $t0
 
 sin0:
       # set iter($t0) to start value
@@ -74,20 +74,20 @@ sin0loop:
           mul.d $f16, $f16, $f12
           mul.d $f16, $f16, $f6
 
-          # copy iter($t0) to floating point unit and convert to double
+          # copy iter($t0) to floating point unit and convert to double($f18)
           mtc1 $t0, $f2
-          cvt.d.w $f8, $f2
-          # divide valueI($f16) by iter($f6)
-          div.d $f16, $f16, $f0
+          cvt.d.w $f18, $f2
+          # divide valueI($f16) by iter($f18)
+          div.d $f16, $f16, $f18
 
           # increase itwe($t0) by 1
           addi $t0, $t0, 1
 
-          # copy iter to floating point unit and convert to double
+          # copy iter($t0) to floating point unit and convert to double($f18)
           mtc1 $t0, $f2
-          cvt.d.w $f8, $f2
-          # divide valueI($f16) by iter($f6)
-          div.d $f16, $f16, $f0
+          cvt.d.w $f18, $f2
+          # divide valueI($f16) by iter($f18)
+          div.d $f16, $f16, $f18
 
           # add valueI($f16) to result($f0) sum
           add.d $f0, $f0, $f16
