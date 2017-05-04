@@ -1,8 +1,9 @@
 .data
 
 # CONSTANTS
-pi:           .double 3.141592653589793115997963468544185161590576171875
-piHalf:       .double 1.570796326794896619231691638751442098584699687552
+# PI and PI/2 with precision of 10^-16 as QTSpim is only this precise
+pi:           .double 3.1415926535897931
+piHalf:       .double 1.5707963267948966
 
 maxIt:        .word 21 # 2 * 9 (9 iteratons) + 3 for iter start value offset
 
@@ -16,6 +17,7 @@ tableHeader:  .asciiz "\tx\t|\tsin(x)\t|\tcos(x)\t|\ttan(x)\n"
 tableSep:     .asciiz ":---------------------:|:--------------------:|:--------------------:|:-------------------:\n"
 spacedPipe:   .asciiz " | "
 endl:         .asciiz "\n"
+notdef:       .asciiz "NOT DEFINED\n"
 finishedM:    .asciiz "\nProgram finished."
 
 # ERROR
@@ -26,7 +28,7 @@ negativeStep: .asciiz "Step must be > 0.\n"
 .align 2
 
 .text
-# TODO: Move cos and tan to own functions?
+# TODO: Add to README why cos and tan are in main loop --> no value moving to different registers etc
 # TODO: Handle special cases for tan
 
 # ----------Constants----------
@@ -157,6 +159,8 @@ calcLoop:
           # calculate sin(Xmin); result will be in $f0
           jal sin
 
+### if $f0 is 0, jump to start to skip since then the values are predictable
+
           # save result($f0) to $f24 to make tan calc easier
           mov.d $f24, $f0
 
@@ -201,6 +205,7 @@ calcLoop:
           la $a0, endl
           syscall
 
+calcLoopCheck:  # label for jump if x = 0 after mapping to interval [-PI/2, PI/2]
           # increase Xmin($f26) by stepsize n($f30) for calculation of next row
           add.d $f26, $f26, $f30
 
@@ -237,7 +242,7 @@ sinLoop:
         # copy x($f4) to argument register($f12) for later jumps
         mov.d $f12, $f4
 
-        # check if x($f4) is smaller than PI/2($f22)
+        # check if x($f4) is smaller or equal to PI/2($f22)
         c.le.d $f4, $f22
         # if not jump to reduce function for over interval
         bc1f overInterv
@@ -247,10 +252,10 @@ sinLoop:
         # calculate -PI/2($f10) with PI/2($f22) and -1($f8)
         mul.d $f10, $f22, $f8
 
-        # check if -PI/2($f10) is smaller than x($f4)
-        c.le.d $f10, $f4
+        # check if x($f4) is smaller than -PI/2($f10)
+        c.lt.d $f4, $f10
         # if true jump to reduce function for under interval
-        bc1f underInterv
+        bc1t underInterv
 
         # fallthrough case: x is in interval [-PI/2, PI/2]
         # start sin calculation
@@ -302,6 +307,27 @@ underInterv:
  # @return: 'result'($f12[+$f13]) approximation of the sin of the input value
  ##
 sin0:
+      # set 0.0 as comp value for special case X = 0
+      li.d $f4, 0.0
+      # check if x($f12) is equal to 0($f4)
+      c.eq.d $f12, $f4
+      # if true jump to function for special case
+      bc1t xIs0
+
+      # check if x($f12) is equal to PI/2($f22)
+      c.eq.d $f12, $f22
+      # if true jump to function for special case
+      bc1t xIsPiHalf
+
+      # set up -1.0($f8) to calculate -PI/2($f10)
+      li.d $f8, -1.0
+      # calculate -PI/2($f10)
+      mul.d $f10, $f8, $f22
+      # check if x($f12) is equal to -PI/2($f10)
+      c.eq.d $f10, $f22
+      # if true jump to function for special case
+      bc1t xIsPiHalf
+
       # set iter($t0) to start value
       li $t0, 2
 
@@ -348,6 +374,90 @@ sin0Loop:
 # end sin0Loop
           # else jump back to calling function
           jr $ra
+##
+ # Handels special case X = 0 after being reduced to interval [-PI/2, PI/2] (also covers X = PI)
+ ##
+xIs0:
+      # load predetermined result 0 for sin(x)
+      li.d $f12, 0.0
+
+      # display result of sin(x)
+      li $v0, 3
+      syscall
+
+      # load and display cell separator
+      li $v0, 4
+      la $a0, spacedPipe
+      syscall
+
+      # load predetermined result 1 of cos(x)
+      li.d $f12, 1.0
+
+      # display result of cos(x)
+      li $v0, 3
+      syscall
+
+      # load and display cell separator
+      li $v0, 4
+      la $a0, spacedPipe
+      syscall
+
+      # load predetermined result 0 of tan(x)
+      li.d $f12, 0.0
+
+      # display result of tan(x)
+      li $v0, 3
+      syscall
+
+      # load and display end of line
+      li $v0, 4
+      la $a0, endl
+      syscall
+
+      # remove return address of sin from stack befor jump
+      addi $sp, $sp, 4
+
+      # jump back to calcLoop
+      j calcLoopCheck
+
+##
+ # Handels special case X = +-PI/2 after being reduced to interval [-PI/2, PI/2]
+ ##
+xIsPiHalf:
+          # load predetermined result 0 for sin(x)
+          li.d $f12, 1.0
+
+          # display result of sin(x)
+          li $v0, 3
+          syscall
+
+          # load and display cell separator
+          li $v0, 4
+          la $a0, spacedPipe
+          syscall
+
+          # load predetermined result 1 of cos(x)
+          li.d $f12, 0.0
+
+          # display result of cos(x)
+          li $v0, 3
+          syscall
+
+          # load and display cell separator
+          li $v0, 4
+          la $a0, spacedPipe
+          syscall
+
+          # load and display "NOT DEFINED" message
+          li $v0, 4
+          la $a0, notdef
+          syscall
+
+          # remove return address of sin from stack befor jump
+          addi $sp, $sp, 4
+
+          # jump back to calcLoop
+          j calcLoopCheck
 
 # HELPER-FUNCTIONS
 # this functions are for nicer code or error handling
