@@ -10,7 +10,7 @@ maxIt:        .word 21 # 2 * 9 (9 iteratons) + 3 for iter start value offset
 # INPUT
 inputMin:       .asciiz "Please enter a value Xmin: "
 inputMax:       .asciiz "Please enter a value Xmax (Xmax > Xmin): "
-inputStep:      .asciiz "Please enter a step size n > 0: "
+inputStep:      .asciiz "Please enter a number of result values > 0: "
 
 # OUTPUT
 tableHeader:  .asciiz "\tx\t|\tsin(x)\t|\tcos(x)\t|\ttan(x)\n"
@@ -23,7 +23,7 @@ finishedM:    .asciiz "\nProgram finished."
 # ERROR
 restartM:     .asciiz "Restarting program\n\n"
 wrongInterv:  .asciiz "Xmax must be larger than Xmin.\n"
-negativeStep: .asciiz "Step must be > 0.\n"
+negativeStep: .asciiz "Result amount be > 0.\n"
 
 .align 2
 
@@ -95,17 +95,19 @@ main:
       la $a0, inputStep
       syscall
 
-      # read n
-      li $v0, 7
+      # read result count
+      li $v0, 5
       syscall
-      # move n to register $fxx (and $fxx+1 as n is double)
-      mov.d $f30, $f0
+
+      # copy input to other register
+      move $t0, $v0
 
       # check if step n is larger than 0
-      # set up compare value 0
-      li.d $f4, 0.0
-      c.le.d $f30, $f4
-      bc1t wSError
+      blt $t0, $zero, wSError
+
+      move $a0, $t0
+
+      jal calcStepSize
 
       # initialize constants
       jal setConstants
@@ -131,6 +133,42 @@ main:
       # end program
       li $v0, 10
 	    syscall
+
+##
+ # Calculates the step size or sets it for the edge case 0
+ ##
+calcStepSize:
+              # check how many results are requested and branch/jump accordingly
+              li $t0, 1
+              beq $a0, $t0, OneResult
+              j MoreResults
+OneResult:
+          # calculate difference of Xmin($f26) and Xmax($f28)
+          sub.d $f4, $f28, $f26
+
+          # load
+          li.d $f6, 1.0
+          # set stepsize to value larger than interval
+          add.d $f30, $f4, $f6
+          j calcStepSizeEnd
+MoreResults:
+            # copy result count to FP unit
+            mtc1 $a0, $f2
+            # convert to double
+            cvt.d.w $f4, $f2
+
+            # calculate difference of Xmin($f26) and Xmax($f28) and save result to ($f6)
+            sub.d $f6, $f28, $f26
+
+            # reduce step amount by 1
+            li.d $f8, 1.0
+            sub.d $f4, $f4, $f8
+
+            # calculate stepsize with (Xmax - Xmin)($f6) / (result amount -1)($f4)
+            div.d $f30, $f6, $f4
+calcStepSizeEnd:
+                # jump back to calling function
+                jr $ra
 
 ##
  # Main loop. Calculates and prints all sin, cos and tan of all values between Xmin and Xmax in
@@ -204,7 +242,6 @@ calcLoop:
           li $v0, 4
           la $a0, endl
           syscall
-
 calcLoopCheck:  # label for jump if x = 0 after mapping to interval [-PI/2, PI/2]
           # increase Xmin($f26) by stepsize n($f30) for calculation of next row
           add.d $f26, $f26, $f30
