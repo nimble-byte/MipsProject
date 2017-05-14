@@ -13,10 +13,20 @@ contributes to the contents of this repository without any external help.
 ## Usage
 
 ### C++ Implementation
-*addDiz*
+1. The C++ source code should be either manually compiled or build with the Makefile provided in the repository.
+
+2. Execute the programm. In case you used the Makefile, it will be named trigonometry.exe.
+
+3. Enter your start value for your interval you want to calculate the trigonometric 
+functions for.
+
+4. Enter the maximum value for your interval. This value must be at larger or equal to 
+the interval start.
+
+5. Enter the number of results you want to receive. 
 
 ### Assembler Implementation
-The Program was developed and tested with the SPIM simulator, that can be found 
+The program was developed and tested with the SPIM simulator, that can be found 
 [here](http://spimsimulator.sourceforge.net/).
 
 1. Load and initialize the ``trigonometry.s`` file within your SPIM simulator. 
