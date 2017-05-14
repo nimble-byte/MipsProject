@@ -102,7 +102,7 @@ main:
       # copy input to other register
       move $t0, $v0
 
-      # check if step n is larger or equal to 1
+      # check if step n is larger or equal to 0
       ble $t0, $zero, wSError
 
       move $a0, $t0
