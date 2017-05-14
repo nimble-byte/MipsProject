@@ -6,19 +6,49 @@ folder `AssSrc`, the basis made by a C++ implementation in `CSrc`. The rest of t
 document will serve as a project documentation and explains the optimizations made to the
 Taylor approximation that is used to calculate the function values.
 
+## Contributors
+The students **Til Goepfert** (MatrNo: *1589440*) and **Eric Felix Kayser** (MatrNo: *enterDiz*)
+contributes to the contents of this repository without any external help.
+
+## Usage
+
+### C++ Implementation
+*addDiz*
+
+### Assembler Implementation
+The Program was developed and tested with the SPIM simulator, that can be found 
+[here](http://spimsimulator.sourceforge.net/).
+
+1. Load and initialize the ``trigonometry.s`` file within your SPIM simulator. 
+
+2. Start the program.
+
+3. Enter your start value for your interval you want to calculate the trigonometric 
+functions for.
+
+4. Enter the maximum value for your interval. This value must be at larger or equal to 
+the interval start.
+
+5. Enter the number of results you want to receive. 
+
 ## Basics
 The program is supposed to take three inputs. An interval start **xMin**, and interval
-end **xMax** and an interval step **n**. All three functions will be calculated for
+end **xMax** and a number of results **n**. All three functions will be calculated for
 each single step and displayed in a table in one row.
 
 The calculations will be approximated by the Taylor approximation of the sin function
 that can be found [here](https://en.wikipedia.org/wiki/Sine#Series_definition). To
 improve precision of the approximation without needing too many iterations of a loop
 that calculates each addend of the Taylor series, the input value will be first reduced
-to the interval *[-PI/2, PI/2]*. The function `sin` will now only reduce all input values to this interval while the real approximation is done by the function `sin0`
+to the interval *[-PI/2, PI/2]*. The function `sin` will only reduce all input values to this interval while the real approximation is done by the function `sin0`
 
 Furthermore *cos(x)* can be calculated using *sin(PI/2 - x)*. The *tan(x)* can be
 calculated from the other two results by dividing *sin(x)/cos(x)*.
+
+To make the calculation of multiple values (according to the given value **n**) possible, 
+the size of the required steps must be calculated. As **n** is defined to be the number of 
+results, the step size can be calculated by using the formula *(xMax - xMin) / (n - 1)*. 
+This way the inputs **xMin** and **xMax** will be counted within the number of results. 
 
 ## Additional Optimizations
 To improve performance as well as precision further the following optimizations were
@@ -46,6 +76,11 @@ we need to divide by.
 5. The value of *sin(x)* will be saved after the calculation to enable much faster
 calculations for *tan(x)*. The value of *cos(x)* will be available in the result
 register **$f0**.
+
+6. The values for 0 or +-PI/2 can be calculated very quick as the values are natural numbers.
+The program offers an exceptional handling for these edge-cases, to speed up calculation.
+Also the *tan(x)* for +-PI/2 is not displayable with double format numbers as it is defined as
+*complex infinity* this special case is also handled within the MIPS program.
 
 All named optimization lead to the following C++ implementation of the loop in the
 function `csin0(double x)` that will approximate *sin(x)* on the interval *[-PI/2,
