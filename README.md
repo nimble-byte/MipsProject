@@ -7,7 +7,7 @@ document will serve as a project documentation and explains the optimizations ma
 Taylor approximation that is used to calculate the function values.
 
 ## Contributors
-The students **Til Goepfert** (MatrNo: *1589440*) and **Eric Felix Kayser** (MatrNo: *enterDiz*)
+The students **Til Goepfert** (MatrNo: *1589440*) and **Eric Felix Kayser** (MatrNo: *9503489*)
 contributes to the contents of this repository without any external help.
 
 ## Usage
