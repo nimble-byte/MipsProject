@@ -1,9 +1,11 @@
 #include <iostream>
 #include <cmath>
+#include <float.h>
+#include <math.h>
 
 #define PI 3.141592653
 
-double getStepSize(int, int, int);
+double getStepSize(double, double, int);
 
 double csin(double);
 
@@ -15,8 +17,9 @@ double csin0(double);
 
 
 int main() {
-    int min, max, steps = 0;
-    double stepsize = 0.0;
+
+    int steps = 0;
+    double min, max, stepsize = 0.0;
 
     // Get input
     std::cout << "Please enter a value Xmin: ";
@@ -31,12 +34,22 @@ int main() {
 
     stepsize = getStepSize(min, max, steps);
 
-    std::cout << "\tx\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
+    std::cout << "\tx\tc sin\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
     std::cout << "----------------|-----------------|---------------|---------------" << std::endl;
 
     for (double i = min; max >= i; i += stepsize) {
-        std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t" << ctan(i) << std::endl;
-        //std::cout << i << "\t" << std::sin(i) << "\t" << csin(i) << std::endl;
+        std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t"
+                  << ctan(i) << std::endl;
+
+        // Following block is for tests only.
+        /*{
+            std::cout << "Difference between C lib and own implementation (sin): " << (std::sin(i) - csin(i))
+                      << std::endl;
+            std::cout << "Difference between C lib and own implementation (cos): " << (std::cos(i) - ccos(i))
+                      << std::endl;
+            std::cout << "Difference between C lib and own implementation (tan): " << (std::tan(i) - ctan(i))
+                      << std::endl;
+        }*/
     }
     return 0;
 }
@@ -48,10 +61,10 @@ int main() {
  * @param steps number of steps to be calculated
  * @return stepsize for given range
  */
-double getStepSize(int min, int max, int steps) {
+double getStepSize(double min, double max, int steps) {
     if (steps == 1) return (max - min) + 1; // Add 1, so we are definitely outside the range
-    double stepsize = (static_cast<double>(max - min) /
-                       static_cast<double>(steps - 1));// steps - 1, since we begin at min and work our way up
+    double stepsize = ((max - min) /
+                       (steps - 1));// steps - 1, since we begin at min and work our way up
     return stepsize;
 }
 
