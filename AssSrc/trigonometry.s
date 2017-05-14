@@ -85,9 +85,9 @@ main:
       # move Xmax to register $f28 (and $29 as Xmax is double)
       mov.d $f28, $f0
 
-      # check if Xmin($f26) is smaller Xmax($28)
+      # check if Xmin($f26) is smaller or equal Xmax($28)
       c.le.d $f26, $f28
-      # branch if Xmin($f26) is not smaller than Xmax($f28)
+      # branch if Xmin($f26) is not smaller or equal than Xmax($f28)
       bc1f wIError
 
       # load and display input request for step value n
@@ -102,8 +102,8 @@ main:
       # copy input to other register
       move $t0, $v0
 
-      # check if step n is larger than 0
-      blt $t0, $zero, wSError
+      # check if step n is larger or equal to 0
+      ble $t0, $zero, wSError
 
       move $a0, $t0
 
