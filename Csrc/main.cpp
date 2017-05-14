@@ -1,7 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <float.h>
-#include <math.h>
 
 #define PI 3.141592653
 
@@ -15,18 +13,17 @@ double ctan(double);
 
 double csin0(double);
 
-
 int main() {
 
     int steps = 0;
-    double min, max, stepsize = 0.0;
+    double min, max, stepsize;
 
     // Get input
     std::cout << "Please enter a value Xmin: ";
     std::cin >> min;
-    std::cout << std::endl << "Please enter a value Xmax (Xmax > Xmin): ";
+    std::cout << "Please enter a value Xmax (Xmax > Xmin): ";
     std::cin >> max;
-    std::cout << std::endl << "Please enter a number of result values > 0: ";
+    std::cout << "Please enter a number of result values > 0: ";
     std::cin >> steps;
     std::cout << std::endl;
 
@@ -34,8 +31,8 @@ int main() {
 
     stepsize = getStepSize(min, max, steps);
 
-    std::cout << "\tx\tc sin\t|\tsin(x)\t  |\tcos(x)\t  |\ttan(x)" << std::endl;
-    std::cout << "----------------|-----------------|---------------|---------------" << std::endl;
+    std::cout << "\tx\t|  \tsin(x)\t\t|\tcos(x)\t\t|\ttan(x)" << std::endl;
+    std::cout << "----------------|-----------------------|-----------------------|-------------------" << std::endl;
 
     for (double i = min; max >= i; i += stepsize) {
         std::cout << "\t" << i << "\t|\t" << csin(i) << "\t|\t" << ccos(i) << "\t|\t"
